@@ -119,7 +119,7 @@ include_directories(
 
 ## Declare a C++ library
 add_library(AGVSocketlib
-  		src/SocketClient.cpp
+  		src/TCPClient.cpp
 )
 
 ## Add cmake target dependencies of the library
