@@ -42,8 +42,8 @@ typedef struct HANsAGVSensorsMsg		//base sensors message.
 
 typedef struct HANsAGVGyroMsg		//陀螺仪传感器数据．
 {
-        byte MsgHeader;
-        byte MsgLength;
+    byte MsgHeader;
+    byte MsgLength;
 
 	char Angle[2];
 	char AngleRate[2];
@@ -96,4 +96,35 @@ struct ControlPackge
               checksum = 0x00;
         }
 };
+//=============================================================
+/*
+ * 里程计数据结构
+ */
+//=============================================================
+struct AgvPose   // 2d pose
+{
+	float X;
+	float Y;
+	float Theta;
+};
+
+struct AgvVelocity
+{
+	float AgvLinear;
+	float AgvAngular;
+};
+
+struct AgvState
+{
+AgvPose Locat;
+AgvVelocity VehVel;
+float PassPath; //基座中心点走过路径
+float PassTheta;
+};
+
+
+
+
+
+
 #endif /* SOURCE_DIRECTORY__INCLUDE_HAN_AGV_DATA_DEFINITION_H_ */
