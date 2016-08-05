@@ -8,13 +8,39 @@
 #ifndef SOURCE_DIRECTORY__INCLUDE_HAN_AGV_DATA_DEFINITION_H_
 #define SOURCE_DIRECTORY__INCLUDE_HAN_AGV_DATA_DEFINITION_H_
 
+typedef unsigned char CheckSUM;		//校验类型．
+typedef unsigned char byte;
+
+
+union int4
+{
+	int Value;
+	byte Bit[4];
+};
+
+union float4
+{
+	float Value;
+	byte Bit[4];
+};
+
+union wchar_t4
+{
+	wchar_t Value;
+	byte Bit[4];
+};
+
+union ushort_int2
+{
+	unsigned short int Value;
+	byte Bit[2];
+};
+
 /************
  * 接收AGV返回的数据
  *
  * **************/
 
-typedef unsigned char CheckSUM;		//校验类型．
-typedef unsigned char byte;
 
 typedef struct HANsAGVMsgHeader		//父数据头
 {
@@ -39,6 +65,7 @@ typedef struct HANsAGVSensorsMsg		//base sensors message.
 	byte HANBattery;
 	byte CurrentBeyond;	//过电流．
 }AGVSENSORS;
+
 
 typedef struct HANsAGVGyroMsg		//陀螺仪传感器数据．
 {
@@ -73,6 +100,7 @@ union CommandBit
 };
 //CommandBit wheel_L, wheel_R;
 
+
 struct ControlCommand
 {
         byte DataHeader;        //控制指令的数据类型编号。
@@ -101,30 +129,41 @@ struct ControlPackge
  * 里程计数据结构
  */
 //=============================================================
-struct AgvPose   // 2d pose
+struct OdomPose   // 2d pose
 {
 	float X;
 	float Y;
-	float Theta;
+	double Theta;
 };
 
-struct AgvVelocity
+struct OdomVelocity
 {
-	float AgvLinear;
-	float AgvAngular;
+	float Linear;
+	float Angular;
 };
 
-struct AgvState
+struct OdomPackage
 {
-AgvPose Locat;
-AgvVelocity VehVel;
-float PassPath; //基座中心点走过路径
-float PassTheta;
+	ushort_int2 TimeStamp;
+	OdomPose Locat;
+	OdomVelocity Velo;
+	float PassPath; //基座中心点走过路径
+	double PassTheta;
 };
 
 
 
+struct PassPath
+{
+	double Right;
+	int Left;
+};
 
+union ReceiveBit
+{
+    int PluseCount;     //单个轮子编码器的脉冲数
+	byte NumBit[4];     //对应的四个字节。
+};
 
 
 #endif /* SOURCE_DIRECTORY__INCLUDE_HAN_AGV_DATA_DEFINITION_H_ */

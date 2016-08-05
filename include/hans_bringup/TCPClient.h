@@ -36,7 +36,7 @@ class TcpClient
     private:
              void ClientGetHostByName(const char *cpHostName);
              void ClientSocket();
-             void ClientSocketAddresInit(const unsigned short int &iPort);
+             void ClientSocketAddresInit(const int &iPort);
              void ClientConnect();
     private:
            // unsigned  int	m_iMaxQueConnNum;       //表示最大连接数

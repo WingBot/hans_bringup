@@ -31,7 +31,7 @@ TcpClient::~TcpClient()
 
     }
 
-    }
+}
 
 void TcpClient::ClientGetHostByName(const char *cpHostName)
 {
@@ -45,7 +45,7 @@ void TcpClient::ClientGetHostByName(const char *cpHostName)
     std::cout<<"The Client Host Name:"<<cpHostName<<std::endl;
 }
 
-void TcpClient::ClientSocketAddresInit(const unsigned short int &iPort)
+void TcpClient::ClientSocketAddresInit(const int &iPort)
 {
 
     /*设置sockaddr_in 结构体中相关参数*/
@@ -144,10 +144,10 @@ int TcpClient::ClientReceive(AGVDATA &rBuffer)
     {
         std::cout<<"Socket Get Not Equal to WantByte"<<std::endl;
     }
-    if(iGet < sizeof(rBuffer))
-    {
-        rBuffer[iGet] = '\0';
-    }
+//    if(iGet < sizeof(rBuffer))
+//    {
+//        rBuffer[iGet] = '\0';
+//    }
     return iGet;
 }
 
@@ -155,6 +155,7 @@ int TcpClient::ClientReceive(AGVDATA &rBuffer)
 void TcpClient::ClientCloseSockfd()
 {
     close(m_iSockfd);
+    std::cout<<"Client Close Sockfd!"<<std::endl;
 }
 
 void TcpClient::ClientControl(const char *cpHostName,const unsigned short int &iPort)
@@ -165,7 +166,7 @@ void TcpClient::ClientControl(const char *cpHostName,const unsigned short int &i
         ClientSocketAddresInit(iPort);
         // 接收缓冲区
         int nRecvBufLen = 32 * 1024; //设置为32K?????
-        (m_iSockfd,SOL_SOCKET, SO_RCVBUF, (const char*)&nRecvBufLen, sizeof(int));
+        setsockopt(m_iSockfd,SOL_SOCKET, SO_RCVBUF, (const char*)&nRecvBufLen, sizeof(int));
      	ClientConnect();
     }
 

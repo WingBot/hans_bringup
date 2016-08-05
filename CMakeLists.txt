@@ -118,8 +118,9 @@ include_directories(
 )
 
 ## Declare a C++ library
-add_library(AGVSocketlib
+add_library(AGVDriverlib
   		src/TCPClient.cpp
+  		src/HansHardware.cpp
 )
 
 ## Add cmake target dependencies of the library
@@ -128,7 +129,11 @@ add_library(AGVSocketlib
 # add_dependencies(hans_bringup ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-# add_executable(hans_bringup_node src/hans_bringup_node.cpp)
+add_executable(hans_bringup_node src/TcpClientTestNode.cpp)
+target_link_libraries(hans_bringup_node AGVDriverlib ${catkin_LIBRARIES})
+
+add_executable(hans_bringup_node2 src/TcpClientTestNode.cpp)
+target_link_libraries(hans_bringup_node2 AGVDriverlib ${catkin_LIBRARIES})
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
