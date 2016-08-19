@@ -8,8 +8,18 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   tf
   geometry_msgs
+   message_generation
+  message_runtime
 )
+ add_message_files(
+   FILES
+   EncoderVel.msg
+ )
 
+ generate_messages(
+   DEPENDENCIES
+   std_msgs
+ )
 
 
 catkin_package(

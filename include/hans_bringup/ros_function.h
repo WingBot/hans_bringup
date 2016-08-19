@@ -2,7 +2,7 @@
  * ros_function.h
  *
  *  Created on: Jul 23, 2016
- *      Author: agv
+ *      Author: szr@giimagv
  */
 
 #ifndef INCLUDE_ROS_FUNCTION_H_
@@ -14,11 +14,11 @@ bool Vel2MotorPWM(const geometry_msgs::TwistConstPtr &Vel,int &PWM_ml,int &PWM_m
 {
 	 //W左轮角速度　＝V车/ R轮半径－（W车＊Ｂ车轮距）／（２＊Ｒ轮半径）　　rad/s　　(Vel->linear.x / WheelR - (WheelBase * Vel->angular.z)/(2*WheelR))
 	 //W右轮角速度　＝V车/ R轮半径＋（W车＊Ｂ车轮距）／（２＊Ｒ轮半径）　　rad/s
-	//W电机角速度　＝　W轮角速度*30  rad/s
+	//W电机角速度　＝　W轮角速度*ReducRatio  rad/s
 	// N = W * 30 / PI  rad/s  ==> 转/min
-	PWM_ml = (int)(    (  Vel->linear.x / WheelR - (WheelBase * Vel->angular.z)/(2*WheelR)   )   * 30 * 30 / PI );
-	PWM_mr = (int)(   (   Vel->linear.x / WheelR + (WheelBase * Vel->angular.z)/(2*WheelR)  )  * 30 * 30 / PI );
-     std::cout<<"PWM_ML"<<PWM_ml<<std::endl;
+	PWM_ml = (int)(    (	Vel->linear.x / 	WheelR - (WheelBaseMeasure * Vel->angular.z)/(2*WheelR)   )   * ReducRatio * RadPerS2RollPerMin );
+	PWM_mr = (int)(  (	Vel->linear.x / 	WheelR + (WheelBaseMeasure * Vel->angular.z)/(2*WheelR)  )  * ReducRatio * RadPerS2RollPerMin );
+     //std::cout<<"PWM_ML"<<PWM_ml<<std::endl;
 }
 
 

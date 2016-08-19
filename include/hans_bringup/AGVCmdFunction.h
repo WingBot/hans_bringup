@@ -2,7 +2,7 @@
  * AGVCmdFunction.h
  *
  *  Created on: Aug 3, 2016
- *      Author: agv
+ *      Author: szr@giimagv
  */
 
 #ifndef INCLUDE_HANS_BRINGUP_AGVCMDFUNCTION_H_
@@ -24,17 +24,33 @@
 #define PI_2    1.5707963267949 // 1/2圆周率
 #define DEG2RAD  0.0174532925199 // 角度转换为弧度参数
 #define RAD2DEG 57.2957795130823 // 弧度转换为角度参数
+#define RadPerS2RollPerMin 30 / PI
+/*
+compute_odom parameter
+*/
+const float Eb_correction = 1.0;
+const float Ed_correction  = 1.0;
+const float linear_scale_correction = 1.0;
+const float angular_scale_correction = 1.0;
 
 const float WheelR = 0.0675;		//	WheelRadius unit:m
-const float WheelRR = 0.0675; 		//	Right WheelRadius for model the odometry unit:m
-const float WheelRL = 0.0675; 		//	Left WheelRadius for model the odometry unit:m
-const float WheelBase = 0.589;		//	WheelBase unit: m
+const float WheelRR = WheelR; 		//	Right WheelRadius for model the odometry unit:m
+const float WheelRL = WheelR * Ed_correction; 		//	Left WheelRadius for model the odometry unit:m
+
+const float WheelBaseMeasure = 0.589;
+const float WheelBase = WheelBaseMeasure * Eb_correction;		//	WheelBase unit: m
+
 const int ReducRatio = 30;  		//	Reduction radio of reduction gear
-const int PlusePR = 30;   			//	encoder para : plus/roll
+const int PlusePR = 60;   			//	encoder para : plus/roll
 static const float DEG_TO_RAD = 0.0174532925;
+static const int TimerScale = 1; //1ms
 
-const double Cm = (2* PI * WheelR) / (ReducRatio * PlusePR);			//脉冲数到线距离m的转换因子
 
+
+
+
+const double Cm_L = (2* PI * WheelRL) / (ReducRatio * PlusePR);			//脉冲数到线距离m的转换因子
+const double Cm_R = (2* PI * WheelRR) / (ReducRatio * PlusePR);			//脉冲数到线距离m的转换因子
 
 bool FillCommand(const int LeftWheelPWM, const int RightWheelPWM, ControlPackge & cmdPackage);
 bool FillStaticFeedback(HANsFeedbackData &agv);
