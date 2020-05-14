@@ -1,25 +1,21 @@
 #include <string>
-#include <ros/ros.h>                           // 包含ROS的头文件
+#include <ros/ros.h>                          
 #include <sensor_msgs/JointState.h>
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
-#include <boost/asio.hpp>                  //包含boost库函数
+#include <boost/asio.hpp>                  
+
 #include <boost/bind.hpp>
 #include <math.h>
-#include "std_msgs/String.h"              //ros定义的String数据类型
-
+#include "std_msgs/String.h"              
 
 #include "stdio.h"
 
 
-
 using namespace std;
-using namespace boost::asio;           //定义一个命名空间，用于后面的读写操作
-
-unsigned char buf[100];                      //定义字符串长度
-
-
-
+using namespace boost::asio;          
+typedef boost::shared_ptr<boost::asio::serial_port> serialp_ptr;
+unsigned char buf[100];                 
 
 int i=0;
 
@@ -27,16 +23,15 @@ int data[]={0};
 
 int main(int argc, char** argv) {
 
-    ros::init(argc, argv, "HexSerialDriver");       //初始化节点
+    ros::init(argc, argv, "HexSerialDriver");   
     ros::NodeHandle n;
     
-    ros::Publisher chatter_pub = n.advertise<std_msgs::String>("Feedback", 1000);      //定义发布消息的名称及sulv
-
+    ros::Publisher chatter_pub = n.advertise<std_msgs::String>("Feedback", 1000);    
     ros::Rate loop_rate(10);
 
 
     io_service iosev;
-    serial_port sp(iosev, "/dev/ttyUSB0");         //定义传输的串口
+    serial_port sp(iosev, "/dev/ttyUSB0");         
     sp.set_option(serial_port::baud_rate(115200));   
     sp.set_option(serial_port::flow_control());
     sp.set_option(serial_port::parity());

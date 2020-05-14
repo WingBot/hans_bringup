@@ -52,6 +52,11 @@ add_library(ComDriverlib
 add_executable(Odom_test_node src/Odom_test.cpp)
 target_link_libraries(Odom_test_node AGVDriverlib ${catkin_LIBRARIES})
 
+add_executable(com_ros_node src/BoostSerialDriver.cpp)
+target_link_libraries(com_ros_node ComDriverlib ${catkin_LIBRARIES})
+
+add_executable(com_test_node src/SuperTerminalTest.cpp)
+target_link_libraries(com_test_node ComDriverlib ${catkin_LIBRARIES})
 
 #add_executable(hans_bringup_node src/TcpClientTestNode.cpp)
 #target_link_libraries(hans_bringup_node AGVDriverlib ${catkin_LIBRARIES})
