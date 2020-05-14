@@ -43,7 +43,9 @@ add_library(AGVDriverlib
   		src/AGVCmdFunction.cpp
 )
 
-
+add_library(ComDriverlib
+  		src/SuperTerminal.cpp
+)
 
 
 
