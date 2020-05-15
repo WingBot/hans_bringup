@@ -7,8 +7,9 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   tf
+  serial
   geometry_msgs
-   message_generation
+  message_generation
   message_runtime
 )
  add_message_files(
@@ -23,7 +24,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 
 catkin_package(
-
+    
 )
 
 
@@ -47,6 +48,9 @@ add_library(ComDriverlib
   		src/SuperTerminal.cpp
 )
 
+add_library(UWBDriverlib
+  		src/uwbDriver.cpp
+)
 
 
 add_executable(Odom_test_node src/Odom_test.cpp)
@@ -57,6 +61,12 @@ target_link_libraries(com_ros_node ComDriverlib ${catkin_LIBRARIES})
 
 add_executable(com_test_node src/SuperTerminalTest.cpp)
 target_link_libraries(com_test_node ComDriverlib ${catkin_LIBRARIES})
+
+add_executable(uwb_driver_test_node src/uwbDriverTest.cpp)
+target_link_libraries(uwb_driver_test_node UWBDriverlib ${catkin_LIBRARIES})
+
+add_executable(ros_serial_test_node src/ROSserialTest.cpp)
+target_link_libraries(ros_serial_test_node ${catkin_LIBRARIES})
 
 #add_executable(hans_bringup_node src/TcpClientTestNode.cpp)
 #target_link_libraries(hans_bringup_node AGVDriverlib ${catkin_LIBRARIES})
