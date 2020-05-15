@@ -124,6 +124,7 @@ class UWBDriver
 
 //         void calc_encoder(int& cur, int& recv, int &delta);
         void check_sum(uint8_t* data, size_t len, uint8_t& dest);
+//         std::String StringToHex(const std::string& data);
         void distribute_data(uint8_t msg_type, uint8_t* buffer_data);
 //         void upload_pid_param();
 
@@ -147,6 +148,10 @@ class UWBDriver
         bool start_flag_;
         uint8_t msg_seq_;
 
+        int16_t rev_dis_anchor_1;
+        int16_t rev_dis_anchor_2;
+        int16_t rev_dis_anchor_3;
+        int16_t rev_dis_anchor_4;
 // 	double ax_roll_acc_;
 // 	double ax_roll_;
 // 	double ax_pitch_acc_;

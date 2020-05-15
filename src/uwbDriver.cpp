@@ -206,7 +206,7 @@ void UWBDriver::check_sum(uint8_t* data, size_t len, uint8_t& dest)
 void UWBDriver::recv_msg()
 {
     ROS_INFO("entering recv_msg");
-    uint8_t buffer_data[255],tag_type;
+    uint8_t buffer_data[40],tag_type;
     state_ = waitingForHead1;
 //     std::cout<<"state_="<<state_<<std::endl;
     recv_flag_ = true;
@@ -254,9 +254,9 @@ void UWBDriver::recv_msg()
                 //ROS_INFO("case waitingForPayload");
                 boost::asio::read(*sp_.get(),boost::asio::buffer(&buffer_data[3],Tagpayload_size),ec_);
                 tag_type = buffer_data[3];
-                ROS_INFO_STREAM_ONCE("recv TagID : ->"<<std::hex << static_cast<int>((int)buffer_data[3]));
-                ROS_INFO_STREAM("recv Dis_L : ->"<<std::hex << static_cast<int>((int)buffer_data[6]));
-                ROS_INFO_STREAM("recv Dis_H : ->"<<std::hex << static_cast<int>((int)buffer_data[7]));
+//                 ROS_INFO_STREAM("recv TagID : ->"<<std::hex << static_cast<int>((int)buffer_data[3]));
+//                 ROS_INFO_STREAM("recv Dis_L : ->"<<std::hex << static_cast<int>((int)buffer_data[6]));
+//                 ROS_INFO_STREAM("recv Dis_H : ->"<<std::hex << static_cast<int>((int)buffer_data[7]));
                 state_ = waitingForEndChar1;
                 break;
             case waitingForEndChar1:
@@ -296,7 +296,26 @@ void UWBDriver::recv_msg()
 void UWBDriver::distribute_data(uint8_t msg_type, uint8_t* buffer_data)
 {
     ROS_INFO_STREAM_ONCE("UWB Kit is Successfuly connected!");
+    switch (msg_type)
+    {
+        case TagMasterID:
+            ROS_INFO_STREAM("Master TAG is connected!");
+            break;
+        case TagSlaveID1:
+            ROS_INFO_STREAM("Slave1 TAG is connected!");
+            break;
+        case TagSlaveID2:
+            ROS_INFO_STREAM("Slave2 TAG is connected!");
+            break;
+        case TagSlaveID3:
+            ROS_INFO_STREAM("Slave3 TAG is connected!");
+            break;
+        default:
+            //ROS_WARN("Undefined data type : %d", msg_type);
+            break;
+    }
     handle_data(msg_type,buffer_data);
+    ROS_INFO_STREAM_ONCE("handle_data is Successfuly !");
  /*   
     switch (msg_type)
     {
@@ -326,6 +345,10 @@ void UWBDriver::distribute_data(uint8_t msg_type, uint8_t* buffer_data)
 //串口数据包解析函数
 void UWBDriver::handle_data(uint8_t msg_type, uint8_t* buffer_data)
 {
+    rev_dis_anchor_1 = buffer_data[7]*256+buffer_data[6];
+    rev_dis_anchor_2 = buffer_data[9]*256+buffer_data[8];
+    rev_dis_anchor_3 = buffer_data[11]*256+buffer_data[10];
+    rev_dis_anchor_4 = buffer_data[13]*256+buffer_data[12];
     
 }
 
@@ -603,4 +626,3 @@ void UWBDriver::handle_data(uint8_t msg_type, uint8_t* buffer_data)
 //     driver.loop();
 //     return 0;
 // }
-
