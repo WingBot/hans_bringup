@@ -17,13 +17,13 @@
 //#include "stdlib.h"
 //#include "time.h"
 #include <math.h>
-#include "trilateration.h"
+#include "hans_bringup/trilateration.h"
 
 //#include <QDebug>
 
 
 /* Largest nonnegative number still considered zero */
-#define   MAXZERO  0.001
+#define     MAXZERO  0.001
 
 #define     ERR_TRIL_CONCENTRIC                     -1
 #define     ERR_TRIL_COLINEAR_2SOLUTIONS            -2
@@ -33,6 +33,8 @@
 
 
 /* Return the difference of two vectors, (vector1 - vector2). */
+// 向量的差
+
 vec3d vdiff(const vec3d vector1, const vec3d vector2)
 {
     vec3d v;
@@ -43,6 +45,8 @@ vec3d vdiff(const vec3d vector1, const vec3d vector2)
 }
 
 /* Return the sum of two vectors. */
+// 向量的和
+
 vec3d vsum(const vec3d vector1, const vec3d vector2)
 {
     vec3d v;
@@ -53,6 +57,8 @@ vec3d vsum(const vec3d vector1, const vec3d vector2)
 }
 
 /* Multiply vector by a number. */
+// 向量的数乘
+
 vec3d vmul(const vec3d vector, const double n)
 {
     vec3d v;
@@ -63,6 +69,8 @@ vec3d vmul(const vec3d vector, const double n)
 }
 
 /* Divide vector by a number. */
+// 向量的数除
+
 vec3d vdiv(const vec3d vector, const double n)
 {
     vec3d v;
@@ -73,6 +81,8 @@ vec3d vdiv(const vec3d vector, const double n)
 }
 
 /* Return the Euclidean norm. */
+// 向量之间的的欧式距离
+
 double vdist(const vec3d v1, const vec3d v2)
 {
     double xd = v1.x - v2.x;
@@ -82,18 +92,24 @@ double vdist(const vec3d v1, const vec3d v2)
 }
 
 /* Return the Euclidean norm. */
+// 向量的模
+
 double vnorm(const vec3d vector)
 {
     return sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
 }
 
 /* Return the dot product of two vectors. */
+// 向量的点乘
+
 double dot(const vec3d vector1, const vec3d vector2)
 {
     return vector1.x * vector2.x + vector1.y * vector2.y + vector1.z * vector2.z;
 }
 
 /* Replace vector with its cross product with another vector. */
+// 向量的叉乘
+
 vec3d cross(const vec3d vector1, const vec3d vector2)
 {
     vec3d v;
@@ -104,7 +120,11 @@ vec3d cross(const vec3d vector1, const vec3d vector2)
 }
 
 /* Return the GDOP (Geometric Dilution of Precision) rate between 0-1.
+ * 0-1的几何精度因子
+ * 
  * Lower GDOP rate means better precision of intersection.
+ * 较低的GDOP速率意味着更好的交点精度
+ * 
  */
 double gdoprate(const vec3d tag, const vec3d p1, const vec3d p2, const vec3d p3)
 {
@@ -137,6 +157,8 @@ double gdoprate(const vec3d tag, const vec3d p1, const vec3d p2, const vec3d p3)
 /* Intersecting a sphere sc with radius of r, with a line p1-p2.
  * Return zero if successful, negative error otherwise.
  * mu1 & mu2 are constant to find points of intersection.
+ * P1与P2连线与半径为r的圆sc的交点，若存在交点，
+ * 
 */
 int sphereline(const vec3d p1, const vec3d p2, const vec3d sc, double r, double *const mu1, double *const mu2)
 {
@@ -179,6 +201,8 @@ int sphereline(const vec3d p1, const vec3d p2, const vec3d sc, double r, double 
  *
  * Return negative number for other errors
  *
+ * 强制采用三球形面求解标签位置，第四个基站数据强制赋值前三个中一个，实际采用了第一个
+ * 
  * To force the function to work with only 3 spheres, provide a duplicate of
  * any sphere at any place among p1, p2, p3 or p4.
  *
@@ -200,10 +224,13 @@ int trilateration(vec3d *const result1,
     int result;
 
     /*********** FINDING TWO POINTS FROM THE FIRST THREE SPHERES **********/
+    //从前三个球中找到两个点
 
     // if there are at least 2 concentric spheres within the first 3 spheres
     // then the calculation may not continue, drop it with error -1
-
+    // 如果前三个球体中至少有2个同心球体，求解则不会继续，返回错误-1
+    //
+    
     /* h = |p3 - p1|, ex = (p3 - p1) / |p3 - p1| */
     ex = vdiff(p3, p1); // vector p13
     h = vnorm(ex); // scalar p13
@@ -234,7 +261,9 @@ int trilateration(vec3d *const result1,
         return ERR_TRIL_CONCENTRIC;
     }
 
-
+//  ex = (p2 - p1) / |p2 - p1| */
+    //新坐标系的单位向量，P12-ex
+    
     ex = vdiv(ex, h); // unit vector ex with respect to p1 (new coordinate system)
 
     /* t1 = p3 - p1, t2 = ex (ex . (p3 - p1)) */
@@ -511,12 +540,16 @@ int trilateration(vec3d *const result1,
  * If any three spheres does not produce valid solution,
  * then each distance is increased to ensure intersection to happens.
  *
+ * 调用三边法求解最优解，如无交点则延长距离确保发生交点
+ * 返回选择3球面方法还是4球面方法
+ * 
  * Return the selected trilateration mode between TRIL_3SPHERES or TRIL_4SPHERES
  * For TRIL_3SPHERES, there are two solutions: solution1 and solution2
  * For TRIL_4SPHERES, there is only one solution: best_solution
  *
  * nosolution_count = the number of failed attempt before intersection is found
  * by increasing the sphere diameter.
+ * 方程无解计数
 */
 int deca_3dlocate ( vec3d   *const solution1,
                     vec3d   *const solution2,
