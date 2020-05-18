@@ -296,6 +296,7 @@ void UWBDriver::recv_msg()
 void UWBDriver::distribute_data(uint8_t msg_type, uint8_t* buffer_data)
 {
     ROS_INFO_STREAM_ONCE("UWB Kit is Successfuly connected!");
+    
     switch (msg_type)
     {
         case TagMasterID:
@@ -316,6 +317,7 @@ void UWBDriver::distribute_data(uint8_t msg_type, uint8_t* buffer_data)
     }
     handle_data(msg_type,buffer_data);
     ROS_INFO_STREAM_ONCE("handle_data is Successfuly !");
+
  /*   
     switch (msg_type)
     {
@@ -345,11 +347,14 @@ void UWBDriver::distribute_data(uint8_t msg_type, uint8_t* buffer_data)
 //串口数据包解析函数
 void UWBDriver::handle_data(uint8_t msg_type, uint8_t* buffer_data)
 {
-    rev_dis_anchor_1 = buffer_data[7]*256+buffer_data[6];
-    rev_dis_anchor_2 = buffer_data[9]*256+buffer_data[8];
-    rev_dis_anchor_3 = buffer_data[11]*256+buffer_data[10];
-    rev_dis_anchor_4 = buffer_data[13]*256+buffer_data[12];
-    
+    rev_dis_anchor_1 = (double)(buffer_data[7]*256+buffer_data[6])/100;
+    ROS_INFO_STREAM("\trecv rev_dis_anchor_1 is  : -> "<< rev_dis_anchor_1);
+    rev_dis_anchor_2 = (double)(buffer_data[9]*256+buffer_data[8])/100;
+    ROS_INFO_STREAM("\trecv rev_dis_anchor_2 is  : -> "<< rev_dis_anchor_2);
+    rev_dis_anchor_3 = (double)(buffer_data[11]*256+buffer_data[10])/100;
+    ROS_INFO_STREAM("\trecv rev_dis_anchor_3 is  : -> "<< rev_dis_anchor_3);
+    //rev_dis_anchor_4 = (double)(buffer_data[13]*256+buffer_data[12])/100;
+    //ROS_INFO_STREAM("recv rev_dis_anchor_4 is  : -> "<< rev_dis_anchor_4);
 }
 
 // //串口速度数据包解析函数

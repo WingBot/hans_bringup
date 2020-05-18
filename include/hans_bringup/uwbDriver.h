@@ -148,10 +148,10 @@ class UWBDriver
         bool start_flag_;
         uint8_t msg_seq_;
 
-        int16_t rev_dis_anchor_1;
-        int16_t rev_dis_anchor_2;
-        int16_t rev_dis_anchor_3;
-        int16_t rev_dis_anchor_4;
+        double rev_dis_anchor_1;
+        double rev_dis_anchor_2;
+        double rev_dis_anchor_3;
+        double rev_dis_anchor_4;
 // 	double ax_roll_acc_;
 // 	double ax_roll_;
 // 	double ax_pitch_acc_;
