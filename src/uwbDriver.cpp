@@ -25,8 +25,30 @@ void UWBDriver::loop() //主循环函数，参数等获取初始化值，并启�
     //获取各运行参数初始化值
     nh_p_.param<std::string>("port_name",port_name_,std::string("/dev/ttyUSB0"));
     nh_p_.param<int>("baud_rate",baud_rate_,115200);
-    ROS_DEBUG_STREAM("found serial port_name: " << port_name_);
-    ROS_DEBUG_STREAM("baud_rate_ is set: " << baud_rate_);
+    nh_p_.param<int>("master_tag_id",master_tag_id_,15);    //0x0F
+    nh_p_.param<int>("slave1_tag_id",slave1_tag_id_,1);     //0x01
+    nh_p_.param<int>("slave2_tag_id",slave2_tag_id_,2);     //0x02
+    nh_p_.param<int>("slave3_tag_id",slave3_tag_id_,3);     //0x03
+    nh_p_.param<double>("anchor0_locat_x",anchor0_locat_x,0.0);
+    nh_p_.param<double>("anchor0_locat_y",anchor0_locat_y,0.0);
+    nh_p_.param<double>("anchor0_locat_z",anchor0_locat_z,0.0);
+    nh_p_.param<double>("anchor1_locat_x",anchor1_locat_x,2.83);
+    nh_p_.param<double>("anchor1_locat_y",anchor1_locat_y,0.0);
+    nh_p_.param<double>("anchor1_locat_z",anchor1_locat_z,0.0);
+    nh_p_.param<double>("anchor2_locat_x",anchor2_locat_x,2.83);
+    nh_p_.param<double>("anchor2_locat_y",anchor2_locat_y,2.15);
+    nh_p_.param<double>("anchor2_locat_z",anchor2_locat_z,0.0);
+
+    ROS_INFO_STREAM("found serial port_name: " << port_name_);
+    ROS_INFO_STREAM("baud_rate_ is set: " << baud_rate_);
+    ROS_INFO_STREAM("master_tag_id: " << std::hex << master_tag_id_);
+    ROS_INFO_STREAM("slave1_tag_id: " << std::hex << slave1_tag_id_);
+    ROS_INFO_STREAM("slave2_tag_id: " << std::hex << slave2_tag_id_);
+    ROS_INFO_STREAM("slave3_tag_id: " << std::hex << slave3_tag_id_);
+    
+    ROS_INFO_STREAM("anchor0:\t[" << std::setprecision(5) << anchor0_locat_x << ",\t"<< anchor0_locat_y<< ",\t"<<anchor0_locat_z << "]");
+    ROS_INFO_STREAM("anchor1:\t[" << std::setprecision(5) << anchor1_locat_x << ",\t"<< anchor1_locat_y<< ",\t"<<anchor1_locat_z << "]");
+    ROS_INFO_STREAM("anchor2:\t[" << std::setprecision(5) << anchor2_locat_x << ",\t"<< anchor2_locat_y<< ",\t"<<anchor2_locat_z << "]");
     //初始化机器人硬件端口及ros发布与订阅话题
     if(initKit())
     {

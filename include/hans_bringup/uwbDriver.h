@@ -74,12 +74,12 @@ enum packetFinderState
 
 
 
-// struct pid_param
-// {
-//     int kp;
-//     int ki;
-//     int kd;
-// };
+struct uwb_locat
+{
+    double x;
+    double y;
+    double z;
+};
 
 // struct imu_data
 // {
@@ -133,6 +133,7 @@ class UWBDriver
 //         int imu_msg_count_=0;
 // 
 //         struct imu_data imu_data_;
+
 //         sensor_msgs::Imu imu_pub_data_;
 //         sensor_msgs::Imu imu_calib_data_;
 //         std_msgs::Float32  battery_pub_data_;
@@ -152,6 +153,24 @@ class UWBDriver
         double rev_dis_anchor_2;
         double rev_dis_anchor_3;
         double rev_dis_anchor_4;
+        
+        struct uwb_locat anchor_locat;
+        double anchor0_locat_x;
+        double anchor0_locat_y;
+        double anchor0_locat_z;
+        
+        double anchor1_locat_x;
+        double anchor1_locat_y;
+        double anchor1_locat_z;
+        
+        double anchor2_locat_x;
+        double anchor2_locat_y;
+        double anchor2_locat_z;
+        
+        int master_tag_id_;
+        int slave1_tag_id_;
+        int slave2_tag_id_;
+        int slave3_tag_id_;
 // 	double ax_roll_acc_;
 // 	double ax_roll_;
 // 	double ax_pitch_acc_;
