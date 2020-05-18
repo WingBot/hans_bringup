@@ -52,6 +52,10 @@ add_library(UWBDriverlib
   		src/uwbDriver.cpp
 )
 
+add_library(Trilaterationlib
+  		src/trilateration.cpp
+)
+
 
 add_executable(Odom_test_node src/Odom_test.cpp)
 target_link_libraries(Odom_test_node AGVDriverlib ${catkin_LIBRARIES})
@@ -63,7 +67,7 @@ add_executable(com_test_node src/SuperTerminalTest.cpp)
 target_link_libraries(com_test_node ComDriverlib ${catkin_LIBRARIES})
 
 add_executable(uwb_driver_test_node src/uwbDriverTest.cpp)
-target_link_libraries(uwb_driver_test_node UWBDriverlib ${catkin_LIBRARIES})
+target_link_libraries(uwb_driver_test_node UWBDriverlib Trilaterationlib ${catkin_LIBRARIES})
 
 add_executable(ros_serial_test_node src/ROSserialTest.cpp)
 target_link_libraries(ros_serial_test_node ${catkin_LIBRARIES})

@@ -11,8 +11,8 @@
 // -------------------------------------------------------------------------------------------------------------------
 
 
-//#include <stdio.h>
-//#include <string.h>
+#include <iostream>
+#include <string.h>
 #include <math.h>
 //#include "stdlib.h"
 //#include "time.h"
@@ -742,15 +742,19 @@ int GetLocation(vec3d *best_solution, int use4thAnchor, vec3d* anchorArray, int 
     //qDebug() << "GetLocation" << r1 << r2 << r3 << r4;
 
     //r4 = r1;
-    printf("r1=%f , r2=%f, r3=%f,  r4=%f\r\n",r1,r2,r3,r4);
-    printf("Anthor0:x = %f,y = %f\r\n",p1.x,p1.y);
-    printf("Anthor1:x = %f,y = %f\r\n",p2.x,p2.y);
-    printf("Anthor2:x = %f,y = %f\r\n",p3.x,p3.y);
+//     printf("r1=%f , r2=%f, r3=%f,  r4=%f\r\n",r1,r2,r3,r4);
+//     printf("Anthor0:x = %f,y = %f\r\n",p1.x,p1.y);
+//     printf("Anthor1:x = %f,y = %f\r\n",p2.x,p2.y);
+//     printf("Anthor2:x = %f,y = %f\r\n",p3.x,p3.y);
+    std::cout << "r1= "<< r1 <<" , r2= "<< r2  <<" , r3= "<< r3 << " , r4= " << r4 << std::endl;
+    std::cout << "Anthor0:x = " << p1.x << " ,y =  " << p1.y << "  " << std::endl;
+    std::cout << "Anthor1:x = " << p2.x << " ,y =  " << p2.y << "  " << std::endl;
+    std::cout << "Anthor2:x = " << p3.x << " ,y =  " << p3.y << "  " << std::endl;
     /* get the best location using 3 or 4 spheres and keep it as know_best_location */
     result = deca_3dlocate (&o1, &o2, best_solution, &error, &best_3derror, &best_gdoprate,
                             p1, r1, p2, r2, p3, r3, p4, r1, &combination);
 
-    printf("result = %d\r\n",result);
+    std::cout << "result = " << result << std::endl;
     //qDebug() << "GetLocation" << result << "sol1: " << o1.x << o1.y << o1.z << " sol2: " << o2.x << o2.y << o2.z;
 
     if(result >= 0)
@@ -845,7 +849,8 @@ int GetLocation2(vec3d * best_solution,int use4thAnchor,vec3d * anchorArray,int 
     x0 = (1/delta)* (2*temp_A*(p1.y-p3.y)-2* temp_B*(p1.y-p2.y));
     // y0 = (1/delta) * (2B(x1-x2)-2A(x1-x3))
     y0 = (1/delta)* (2*temp_B*(p1.x-p2.x)-2*temp_A*(p1.x-p3.x));
-    printf("TAG LOC:x = %f,y = %f\r\n",x0,y0);
+//     printf("TAG LOC:x = %f,y = %f\r\n",x0,y0);
+    std::cout << "TAG LOC:x = %f,y = %f\r\n" << x0 << y0 << std::endl;
     return 1;
 }
 
@@ -1007,7 +1012,7 @@ void Th_Location(vec3d * anchorArray,int * distanceArray)
     circles[1].center.y = anchorArray[1].y;
     circles[1].r = distanceArray[1]/1000;
 
-	  circles[2].center.x = anchorArray[2].x;
+    circles[2].center.x = anchorArray[2].x;
     circles[2].center.y = anchorArray[2].y;
     circles[2].r = distanceArray[2]/1000;
 
@@ -1077,7 +1082,8 @@ void Th_Location(vec3d * anchorArray,int * distanceArray)
     P_2 = y_acc / 3.0;
     Location[0].x = P_1;
     Location[0].y = P_2;
-		printf("TAG LOC My:x = %3.2f,y = %3.2f\r\n",P_1,P_2);
+//     printf("TAG LOC My:x = %3.2f,y = %3.2f\r\n",P_1,P_2);
+    std::cout << "TAG LOC My:x = %3.2f,y = %3.2f\r\n" << P_1 << P_2 << std::endl;
     
 }
 
@@ -1114,8 +1120,9 @@ void trilateration_1(struct point point1, struct point point2, struct point poin
     double finalY = point1.y+ x*ex.y + y*ey.y;
     resultPose.x = finalX;
     resultPose.y = finalY;
-
-	printf("TAG LOC My1:x = %3.2f,y = %3.2f\r\n",resultPose.x,resultPose.y);
+//     std::cout<<
+// 	printf("TAG LOC My1:x = %3.2f,y = %3.2f\r\n",resultPose.x,resultPose.y);
+    std::cout << "TAG LOC My1:x = %3.2f,y = %3.2f\r\n" << resultPose.x << resultPose.y << std::endl;
     
 }
 void Th_Location2(vec3d * anchorArray,int * distanceArray)

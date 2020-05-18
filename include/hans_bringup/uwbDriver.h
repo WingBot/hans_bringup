@@ -72,15 +72,12 @@ enum packetFinderState
     handlePayload
 };
 
-
-
-struct uwb_locat
-{
-    double x;
-    double y;
-    double z;
-};
-
+// typedef struct vec3d	vec3d;
+// struct vec3d {
+// 	double	x;
+// 	double	y;
+// 	double	z;
+// };
 // struct imu_data
 // {
 //     float angle_x;
@@ -117,6 +114,8 @@ class UWBDriver
 //         void dynamic_reconfig_callback(xtark_driver::PID_reconfigConfig &config, uint32_t level);
 //         void calib_imu_callback(const sensor_msgs::Imu::ConstPtr& msg);
         void handle_data(uint8_t msg_type,uint8_t* buffer_data);
+        void handle_and_trilateration(uint8_t msg_type,uint8_t* buffer_data);
+        
 //         void handle_speed_data(uint8_t* buffer_data);
 //         void handle_battery_data(uint8_t* buffer_data);
 //         void handle_imu_data(uint8_t* buffer_data);
@@ -139,6 +138,7 @@ class UWBDriver
 //         std_msgs::Float32  battery_pub_data_;
 
 //         boost::mutex cmd_vel_mutex_;
+
         boost::system::error_code ec_;
         boost::asio::io_service io_service_;
         boost::mutex mutex_;
@@ -154,7 +154,7 @@ class UWBDriver
         double rev_dis_anchor_3;
         double rev_dis_anchor_4;
         
-        struct uwb_locat anchor_locat;
+//         struct uwb_locat anchor_locat;
         double anchor0_locat_x;
         double anchor0_locat_y;
         double anchor0_locat_z;

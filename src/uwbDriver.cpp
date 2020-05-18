@@ -1,4 +1,5 @@
 #include "hans_bringup/uwbDriver.h"
+#include "hans_bringup/trilateration.h"
 
 // UWBDriver::UWBDriver():msg_seq_(0),start_flag_(true),cur_left_(0),cur_right_(0),state_(waitingForHead1){}
 UWBDriver::UWBDriver():state_(waitingForHead1),start_flag_(true){}
@@ -337,7 +338,8 @@ void UWBDriver::distribute_data(uint8_t msg_type, uint8_t* buffer_data)
             //ROS_WARN("Undefined data type : %d", msg_type);
             break;
     }
-    handle_data(msg_type,buffer_data);
+//     handle_data(msg_type,buffer_data);
+    handle_and_trilateration(msg_type,buffer_data);
     ROS_INFO_STREAM_ONCE("handle_data is Successfuly !");
 
  /*   
@@ -378,6 +380,50 @@ void UWBDriver::handle_data(uint8_t msg_type, uint8_t* buffer_data)
     //rev_dis_anchor_4 = (double)(buffer_data[13]*256+buffer_data[12])/100;
     //ROS_INFO_STREAM("recv rev_dis_anchor_4 is  : -> "<< rev_dis_anchor_4);
     
+}
+
+//串口数据包解析函数
+void UWBDriver::handle_and_trilateration(uint8_t msg_type, uint8_t* buffer_data)
+{
+    vec3d anchorArray[3];
+    vec3d best_solution;
+    int use4thAnchor = 0;
+    int distanceArray[4];
+    int result;
+    rev_dis_anchor_1 = (double)(buffer_data[7]*256+buffer_data[6])/100;
+    ROS_INFO_STREAM("\trecv rev_dis_anchor_1 is  : -> "<< rev_dis_anchor_1);
+    rev_dis_anchor_2 = (double)(buffer_data[9]*256+buffer_data[8])/100;
+    ROS_INFO_STREAM("\trecv rev_dis_anchor_2 is  : -> "<< rev_dis_anchor_2);
+    rev_dis_anchor_3 = (double)(buffer_data[11]*256+buffer_data[10])/100;
+    ROS_INFO_STREAM("\trecv rev_dis_anchor_3 is  : -> "<< rev_dis_anchor_3);
+    rev_dis_anchor_4 = (double)(buffer_data[13]*256+buffer_data[12])/100;
+    //ROS_INFO_STREAM("recv rev_dis_anchor_4 is  : -> "<< rev_dis_anchor_4);
+    anchorArray[0].x = anchor0_locat_x;
+    anchorArray[0].y = anchor0_locat_y;
+    anchorArray[0].z = anchor0_locat_z;
+    anchorArray[1].x = anchor1_locat_x;
+    anchorArray[1].y = anchor1_locat_y;
+    anchorArray[1].z = anchor1_locat_z;
+    anchorArray[2].x = anchor2_locat_x;
+    anchorArray[2].y = anchor2_locat_y;
+    anchorArray[2].z = anchor2_locat_z;
+    distanceArray[0] = (buffer_data[7]*256+buffer_data[6])*10;
+    distanceArray[1] = (buffer_data[9]*256+buffer_data[8])*10;
+    distanceArray[2] = (buffer_data[11]*256+buffer_data[10])*10;
+    distanceArray[3] = (buffer_data[13]*256+buffer_data[12])*10;
+    ROS_INFO_STREAM("distanceArray[0]: " << distanceArray[0]);
+    ROS_INFO_STREAM("distanceArray[0]: " << distanceArray[1]);
+    ROS_INFO_STREAM("distanceArray[0]: " << distanceArray[2]);
+    ROS_INFO_STREAM("distanceArray[0]: " << distanceArray[3]);
+//     ROS_INFO_STREAM("slave1_tag_id: " << std::hex << slave1_tag_id_);
+//     ROS_INFO_STREAM("slave2_tag_id: " << std::hex << slave2_tag_id_);
+//     ROS_INFO_STREAM("slave3_tag_id: " << std::hex << slave3_tag_id_);
+    
+    ROS_INFO_STREAM("anchor0:\t[" << anchorArray[0].x << ",\t"<< anchorArray[0].y << ",\t"<< anchorArray[0].z << "]");
+    ROS_INFO_STREAM("anchor1:\t[" << anchorArray[1].x << ",\t"<< anchorArray[1].y << ",\t"<< anchorArray[1].z << "]");
+    ROS_INFO_STREAM("anchor2:\t[" << anchorArray[2].x << ",\t"<< anchorArray[2].y << ",\t"<< anchorArray[2].z << "]");
+    result = GetLocation( &best_solution, use4thAnchor, anchorArray, distanceArray);
+    ROS_INFO_STREAM("best_solution: " << std::hex << best_solution.x << " : " << best_solution.y << " : " << best_solution.z);
 }
 
 // //串口速度数据包解析函数
