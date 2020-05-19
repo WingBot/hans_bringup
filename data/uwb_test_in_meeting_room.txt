@@ -1,0 +1,58 @@
+anchor0:	[0,    0,      0]
+anchor1:	[1.5,  0,      0]
+anchor2:	[1.5,  1.8,    0]
+
+tag:[0.75,  0.90    0.0]
+r1= 1.08 , r2= 1.09 , r3= 1.15 
+best_solution: 0.742767 : 0.862667 : 0
+
+[ INFO] [1589852304.532413397]: anchor0:	[0,	0,	0]
+[ INFO] [1589852304.532447704]: anchor1:	[1.5,	0,	0]
+[ INFO] [1589852304.532486196]: anchor2:	[1.5,	1.8,	0]
+r1= 1.09 , r2= 1.09 , r3= 1.15 , r4= 1.09
+best_solution: 0.750000 : 0.862667  : 0
+best_solution: 0.771900 : 0.856639  : 0
+best_solution: 0.764533 : 0.850222  : 0
+best_solution: 0.742767	: 0.862667	: 0
+best_solution: 0.757233	: 0.856639	: 0
+best_solution: 0.7573	: 0.862667	: 0
+best_solution: 0.7427	: 0.86875	: 0
+best_solution: 0.757233	: 0.863	    : 0
+best_solution: 0.757233	: 0.856639	: 0
+best_solution: 0.75	    : 0.862667	: 0
+best_solution: 0.742767	: 0.862667	: 0
+best_solution: 0.75	    : 0.869028	: 0
+best_solution: 0.757233	: 0.863	    : 0
+tag:          [0.75,      0.90       0.0]
+average        0.753915 : 0.86132
+error          0.003m     0.039m
+
+
+tag:          [0.75       0.765       0.0]
+best_solution: 0.777733	: 0.740972	: 0
+best_solution: 0.7845	: 0.742361	: 0
+best_solution: 0.777733	: 0.748	    : 0
+best_solution: 0.7707	: 0.754972	: 0
+best_solution: 0.763733	: 0.740972	: 0
+best_solution: 0.763733	: 0.740972	: 0
+best_solution: 0.7569	: 0.760667	: 0
+best_solution: 0.763733	: 0.748	    : 0
+best_solution: 0.763733	: 0.740972	: 0
+best_solution: 0.7707	: 0.733889	: 0
+average        0.769    : 0.745177
+error          0.019m     0.02m
+
+
+tag:          [0.75       1.04       0.0]
+best_solution: 0.7885	: 0.942583	: 0
+best_solution: 0.7885	: 0.942583	: 0
+best_solution: 0.7964	: 0.942583	: 0
+best_solution: 0.7964	: 0.936667	: 0
+best_solution: 0.7731	: 0.942972	: 0
+best_solution: 0.7964	: 0.930694	: 0
+best_solution: 0.7885	: 0.930694	: 0
+best_solution: 0.788833	: 0.942972	: 0
+best_solution: 0.7964	: 0.936667	: 0
+best_solution: 0.804367	: 0.942583	: 0
+average        0.791690 : 0.939099
+error:         0.04m      0.101m

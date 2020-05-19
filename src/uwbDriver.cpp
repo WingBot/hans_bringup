@@ -423,7 +423,7 @@ void UWBDriver::handle_and_trilateration(uint8_t msg_type, uint8_t* buffer_data)
     ROS_INFO_STREAM("anchor1:\t[" << anchorArray[1].x << ",\t"<< anchorArray[1].y << ",\t"<< anchorArray[1].z << "]");
     ROS_INFO_STREAM("anchor2:\t[" << anchorArray[2].x << ",\t"<< anchorArray[2].y << ",\t"<< anchorArray[2].z << "]");
     result = GetLocation( &best_solution, use4thAnchor, anchorArray, distanceArray);
-    ROS_INFO_STREAM("best_solution: " << std::hex << best_solution.x << " : " << best_solution.y << " : " << best_solution.z);
+    ROS_INFO_STREAM("best_solution: " << std::setprecision(6) << best_solution.x << "\t: " << best_solution.y << "\t: " << best_solution.z);
 }
 
 // //串口速度数据包解析函数
