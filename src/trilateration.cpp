@@ -563,6 +563,7 @@ int deca_3dlocate ( vec3d   *const solution1,
                     vec3d p4, double r4,
                     int *combination)
 {
+//     std::cout << " entering deca_3dlocate.... " << std::endl;
     vec3d   o1, o2, solution, ptemp;
     vec3d   solution_compare1, solution_compare2;
     double  /*error_3dcompare1, error_3dcompare2,*/ rtemp;
@@ -596,7 +597,9 @@ int deca_3dlocate ( vec3d   *const solution1,
         ovr_r4 = r4;
         do
         {
+//             std::cout << " entering trilateration.... " << std::endl;
             result = trilateration(&o1, &o2, &solution, p1, ovr_r1, p2, ovr_r2, p3, ovr_r3, p4, ovr_r4, MAXZERO);
+            std::cout << "trilateration result = " << result << std::endl;
             switch (result)
             {
                 case TRIL_3SPHERES: // 3 spheres are used to get the result
@@ -642,7 +645,9 @@ int deca_3dlocate ( vec3d   *const solution1,
                 case TRIL_4SPHERES:
                     /* calculate the new gdop */
                     gdoprate_compare1   = gdoprate(solution, p1, p2, p3);
-
+//                     std::cout << "gdoprate_compare1 = " << gdoprate_compare1 << std::endl;
+                    std::cout << "gdoprate_compare1 = " << gdoprate_compare1 << std::endl;
+                    std::cout << "gdoprate_compare2 = " << gdoprate_compare2<< std::endl;
                     /* compare and swap with the better result */
                     if (gdoprate_compare1 <= gdoprate_compare2)
                     {
@@ -674,12 +679,14 @@ int deca_3dlocate ( vec3d   *const solution1,
                         r3 = r4;
                         r4 = rtemp;
                         combination_counter--;
+                        std::cout << "combination_counter = " << combination_counter << std::endl;
                     }
                     break;
 
                 default:
                     break;
             }
+            std::cout << "finshed if(success) = " << std::endl;
         }
         else
         {
@@ -693,12 +700,15 @@ int deca_3dlocate ( vec3d   *const solution1,
         //combination_counter--;
         //qDebug() << "while(combination_counter)" << combination_counter;
     }
-    while (combination_counter);
 
+    while (combination_counter);
+    
     // if it gives error for all 4 sphere combinations then no valid result is given
     // otherwise return the trilateration mode used
+    std::cout << "trilateration_mode34 = " << trilateration_mode34 << std::endl;
     if (trilateration_errcounter >= 4) return -1;
     else return trilateration_mode34;
+    
 
 }
 
@@ -734,13 +744,9 @@ int GetLocation(vec3d *best_solution, int use4thAnchor, vec3d* anchorArray, int 
     r1 = (double) distanceArray[0] / 1000.0;
     r2 = (double) distanceArray[1] / 1000.0;
     r3 = (double) distanceArray[2] / 1000.0;
-
     //r4 = (double) distanceArray[3] / 1000.0;
-
-    r4 = (double) distanceArray[0] / 1000.0;//4th same as 1st - only 3 used for trilateration
-
+    r4 = (double) distanceArray[3] / 1000.0;//4th same as 1st - only 3 used for trilateration
     //qDebug() << "GetLocation" << r1 << r2 << r3 << r4;
-
     //r4 = r1;
 //     printf("r1=%f , r2=%f, r3=%f,  r4=%f\r\n",r1,r2,r3,r4);
 //     printf("Anthor0:x = %f,y = %f\r\n",p1.x,p1.y);
@@ -750,12 +756,13 @@ int GetLocation(vec3d *best_solution, int use4thAnchor, vec3d* anchorArray, int 
     std::cout << "Anthor0:x = " << p1.x << " ,y =  " << p1.y << "  " << std::endl;
     std::cout << "Anthor1:x = " << p2.x << " ,y =  " << p2.y << "  " << std::endl;
     std::cout << "Anthor2:x = " << p3.x << " ,y =  " << p3.y << "  " << std::endl;
+    std::cout << "Anthor3:x = " << p4.x << " ,y =  " << p4.y << "  " << std::endl;
     /* get the best location using 3 or 4 spheres and keep it as know_best_location */
     result = deca_3dlocate (&o1, &o2, best_solution, &error, &best_3derror, &best_gdoprate,
                             p1, r1, p2, r2, p3, r3, p4, r1, &combination);
 
-    std::cout << "result = " << result << std::endl;
-    //qDebug() << "GetLocation" << result << "sol1: " << o1.x << o1.y << o1.z << " sol2: " << o2.x << o2.y << o2.z;
+    std::cout << "deca_3dlocate result = " << result << std::endl;
+//     qDebug() << "GetLocation" << result << "sol1: " << o1.x << o1.y << o1.z << " sol2: " << o2.x << o2.y << o2.z;
 
     if(result >= 0)
     {
@@ -799,19 +806,12 @@ int GetLocation2(vec3d * best_solution,int use4thAnchor,vec3d * anchorArray,int 
     /*
     Beacon: AP1( 5,5 )
     AP2( 8,5 ) AP3( 6.5,2.5 )
-
     r1 = 2 r2 = 2 r3 = 2
-
     Solution: x0 = (1/delta) * (2A(y1-y3)-2B(y1-y2)) y0 = (1/delta) * (2B(x1-x2)-2A(x1-x3))
-
     delta = 4*((x1-x2)(y1-y3)-(x1-x3)(y1-y2))
-
     A = r2 -r12-x22+x12-y22+y12
-
     B = r32-r12-x32+x12-y32+y12
-
     Result: x = 10 y = 5
-
     */
 
 

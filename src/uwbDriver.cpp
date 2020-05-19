@@ -30,15 +30,19 @@ void UWBDriver::loop() //主循环函数，参数等获取初始化值，并启�
     nh_p_.param<int>("slave1_tag_id",slave1_tag_id_,1);     //0x01
     nh_p_.param<int>("slave2_tag_id",slave2_tag_id_,2);     //0x02
     nh_p_.param<int>("slave3_tag_id",slave3_tag_id_,3);     //0x03
+    nh_p_.param<int>("use4thAnchor",use4thAnchor,1);     //true
     nh_p_.param<double>("anchor0_locat_x",anchor0_locat_x,0.0);
     nh_p_.param<double>("anchor0_locat_y",anchor0_locat_y,0.0);
-    nh_p_.param<double>("anchor0_locat_z",anchor0_locat_z,0.0);
+    nh_p_.param<double>("anchor0_locat_z",anchor0_locat_z,2.0);
     nh_p_.param<double>("anchor1_locat_x",anchor1_locat_x,2.83);
     nh_p_.param<double>("anchor1_locat_y",anchor1_locat_y,0.0);
-    nh_p_.param<double>("anchor1_locat_z",anchor1_locat_z,0.0);
+    nh_p_.param<double>("anchor1_locat_z",anchor1_locat_z,2.0);
     nh_p_.param<double>("anchor2_locat_x",anchor2_locat_x,2.83);
     nh_p_.param<double>("anchor2_locat_y",anchor2_locat_y,2.15);
-    nh_p_.param<double>("anchor2_locat_z",anchor2_locat_z,0.0);
+    nh_p_.param<double>("anchor2_locat_z",anchor2_locat_z,2.0);
+    nh_p_.param<double>("anchor3_locat_x",anchor3_locat_x,0.0);
+    nh_p_.param<double>("anchor3_locat_y",anchor3_locat_y,2.15);
+    nh_p_.param<double>("anchor3_locat_z",anchor3_locat_z,2.0);
 
     ROS_INFO_STREAM("found serial port_name: " << port_name_);
     ROS_INFO_STREAM("baud_rate_ is set: " << baud_rate_);
@@ -46,10 +50,11 @@ void UWBDriver::loop() //主循环函数，参数等获取初始化值，并启�
     ROS_INFO_STREAM("slave1_tag_id: " << std::hex << slave1_tag_id_);
     ROS_INFO_STREAM("slave2_tag_id: " << std::hex << slave2_tag_id_);
     ROS_INFO_STREAM("slave3_tag_id: " << std::hex << slave3_tag_id_);
-    
+    ROS_INFO_STREAM("use4thAnchor: " << use4thAnchor);
     ROS_INFO_STREAM("anchor0:\t[" << std::setprecision(5) << anchor0_locat_x << ",\t"<< anchor0_locat_y<< ",\t"<<anchor0_locat_z << "]");
     ROS_INFO_STREAM("anchor1:\t[" << std::setprecision(5) << anchor1_locat_x << ",\t"<< anchor1_locat_y<< ",\t"<<anchor1_locat_z << "]");
     ROS_INFO_STREAM("anchor2:\t[" << std::setprecision(5) << anchor2_locat_x << ",\t"<< anchor2_locat_y<< ",\t"<<anchor2_locat_z << "]");
+    ROS_INFO_STREAM("anchor3:\t[" << std::setprecision(5) << anchor3_locat_x << ",\t"<< anchor3_locat_y<< ",\t"<<anchor3_locat_z << "]");
     //初始化机器人硬件端口及ros发布与订阅话题
     if(initKit())
     {
@@ -385,9 +390,9 @@ void UWBDriver::handle_data(uint8_t msg_type, uint8_t* buffer_data)
 //串口数据包解析函数
 void UWBDriver::handle_and_trilateration(uint8_t msg_type, uint8_t* buffer_data)
 {
-    vec3d anchorArray[3];
+    vec3d anchorArray[4];
     vec3d best_solution;
-    int use4thAnchor = 0;
+    
     int distanceArray[4];
     int result;
     rev_dis_anchor_1 = (double)(buffer_data[7]*256+buffer_data[6])/100;
@@ -397,7 +402,7 @@ void UWBDriver::handle_and_trilateration(uint8_t msg_type, uint8_t* buffer_data)
     rev_dis_anchor_3 = (double)(buffer_data[11]*256+buffer_data[10])/100;
     ROS_INFO_STREAM("\trecv rev_dis_anchor_3 is  : -> "<< rev_dis_anchor_3);
     rev_dis_anchor_4 = (double)(buffer_data[13]*256+buffer_data[12])/100;
-    //ROS_INFO_STREAM("recv rev_dis_anchor_4 is  : -> "<< rev_dis_anchor_4);
+    ROS_INFO_STREAM("\trecv rev_dis_anchor_4 is  : -> "<< rev_dis_anchor_4);
     anchorArray[0].x = anchor0_locat_x;
     anchorArray[0].y = anchor0_locat_y;
     anchorArray[0].z = anchor0_locat_z;
@@ -407,6 +412,9 @@ void UWBDriver::handle_and_trilateration(uint8_t msg_type, uint8_t* buffer_data)
     anchorArray[2].x = anchor2_locat_x;
     anchorArray[2].y = anchor2_locat_y;
     anchorArray[2].z = anchor2_locat_z;
+    anchorArray[3].x = anchor3_locat_x;
+    anchorArray[3].y = anchor3_locat_y;
+    anchorArray[3].z = anchor3_locat_z;
     distanceArray[0] = (buffer_data[7]*256+buffer_data[6])*10;
     distanceArray[1] = (buffer_data[9]*256+buffer_data[8])*10;
     distanceArray[2] = (buffer_data[11]*256+buffer_data[10])*10;
@@ -422,6 +430,7 @@ void UWBDriver::handle_and_trilateration(uint8_t msg_type, uint8_t* buffer_data)
     ROS_INFO_STREAM("anchor0:\t[" << anchorArray[0].x << ",\t"<< anchorArray[0].y << ",\t"<< anchorArray[0].z << "]");
     ROS_INFO_STREAM("anchor1:\t[" << anchorArray[1].x << ",\t"<< anchorArray[1].y << ",\t"<< anchorArray[1].z << "]");
     ROS_INFO_STREAM("anchor2:\t[" << anchorArray[2].x << ",\t"<< anchorArray[2].y << ",\t"<< anchorArray[2].z << "]");
+    ROS_INFO_STREAM("anchor3:\t[" << anchorArray[3].x << ",\t"<< anchorArray[3].y << ",\t"<< anchorArray[3].z << "]");
     result = GetLocation( &best_solution, use4thAnchor, anchorArray, distanceArray);
     ROS_INFO_STREAM("best_solution: " << std::setprecision(6) << best_solution.x << "\t: " << best_solution.y << "\t: " << best_solution.z);
 }

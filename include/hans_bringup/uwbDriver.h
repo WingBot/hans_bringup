@@ -167,10 +167,16 @@ class UWBDriver
         double anchor2_locat_y;
         double anchor2_locat_z;
         
+        double anchor3_locat_x;
+        double anchor3_locat_y;
+        double anchor3_locat_z;
+        
         int master_tag_id_;
         int slave1_tag_id_;
         int slave2_tag_id_;
         int slave3_tag_id_;
+        
+        int use4thAnchor;
 // 	double ax_roll_acc_;
 // 	double ax_roll_;
 // 	double ax_pitch_acc_;
