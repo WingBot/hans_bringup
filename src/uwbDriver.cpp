@@ -59,6 +59,8 @@ void UWBDriver::loop() //主循环函数，参数等获取初始化值，并启�
     if(initKit())
     {
       
+//         odom_pub_    = nh_.advertise<nav_msgs::Odometry>("odom",10);
+//         cmd_sub_     = nh_.subscribe<geometry_msgs::Twist>("cmd_vel",10,&XtarkDriver::cmd_vel_callback,this);
 	//控制指令发布任务循环定时器
 //         ros::Timer send_speed_timer = nh_.createTimer(ros::Duration(1.0/control_rate_),&UWBDriver::send_speed_callback,this);
 
@@ -243,7 +245,7 @@ void UWBDriver::recv_msg()
         //该方法必须保证不丢帧，数据包完整，接收数据帧头必须是head
         switch (state_)
         {
-            
+
             case waitingForHead1:
 //                 ROS_INFO("case waitingForHead1");
                 boost::asio::read(*sp_.get(), boost::asio::buffer(&buffer_data[0],1), ec_);
